@@ -1,0 +1,21 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: redeep-platform-apps-web
+    match:
+      path:
+        prefix: /
+name: redeep-staging
+region: ams
+static_sites:
+- environment_slug: html
+  git:
+    branch: main
+    repo_clone_url: https://github.com/landecglobal/redeep.git
+  name: redeep-platform-apps-web
+  source_dir: /
