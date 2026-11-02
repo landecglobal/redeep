@@ -1,0 +1,7 @@
+# Local basemap build workspace (Planetiler inputs/outputs, tiles, logs).
+# Includes world.pmtiles (~78 GB, served from DO Spaces): must never land in git or the static deploy.
+basemap/
+
+*.log
+.DS_Store
+Thumbs.db
