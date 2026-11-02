@@ -1,6 +1,9 @@
 alerts:
 - rule: DEPLOYMENT_FAILED
 - rule: DOMAIN_FAILED
+domains:
+- domain: staging.redeep.com
+  type: PRIMARY
 features:
 - buildpack-stack=ubuntu-22
 ingress:

@@ -4,6 +4,8 @@ alerts:
 domains:
 - domain: maperty.landec.io
   type: PRIMARY
+- domain: www.redeep.com
+  type: ALIAS
 features:
 - buildpack-stack=ubuntu-22
 ingress:
