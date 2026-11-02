@@ -1,0 +1,27 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+domains:
+- domain: maperty.landec.io
+  type: PRIMARY
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: redeep-platform-apps-web
+    match:
+      path:
+        prefix: /
+name: redeep-prod
+region: ams
+static_sites:
+- environment_slug: html
+  github:
+    branch: prod
+    deploy_on_push: true
+    repo: landecglobal/redeep
+  name: redeep-platform-apps-web
+  source_dir: /
+vpc:
+  id: da5647c1-b1f1-4e7e-8f28-6fbf55943e28
