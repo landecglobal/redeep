@@ -2,10 +2,8 @@ alerts:
 - rule: DEPLOYMENT_FAILED
 - rule: DOMAIN_FAILED
 domains:
-- domain: maperty.landec.io
-  type: PRIMARY
 - domain: www.redeep.com
-  type: ALIAS
+  type: PRIMARY
 features:
 - buildpack-stack=ubuntu-22
 ingress:
@@ -15,7 +13,7 @@ ingress:
     match:
       path:
         prefix: /
-name: redeep-prod
+name: redeep-web-prod
 region: ams
 static_sites:
 - environment_slug: html

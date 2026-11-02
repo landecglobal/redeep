@@ -13,12 +13,15 @@ ingress:
     match:
       path:
         prefix: /
-name: redeep-staging
+name: redeep-web-staging
 region: ams
 static_sites:
 - environment_slug: html
-  git:
+  github:
     branch: main
-    repo_clone_url: https://github.com/landecglobal/redeep.git
+    deploy_on_push: false
+    repo: landecglobal/redeep
   name: redeep-platform-apps-web
   source_dir: /
+vpc:
+  id: da5647c1-b1f1-4e7e-8f28-6fbf55943e28
