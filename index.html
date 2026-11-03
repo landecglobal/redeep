@@ -73,6 +73,26 @@
         backdrop-filter: blur(6px);
       }
 
+      .powered {
+        pointer-events: auto;
+        margin-left: auto;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #cfe9e5;
+        padding: 6px 10px;
+        border-radius: 10px;
+        background: rgba(3, 6, 10, 0.72);
+        backdrop-filter: blur(6px);
+      }
+
+      .powered strong {
+        color: #8ef6e8;
+        font-weight: 600;
+      }
+
       .styles button {
         font: inherit;
         font-size: 13px;
@@ -122,6 +142,8 @@
     <div class="bar">
       <a class="brand" href="./landing.html" title="Redeep">Redeep</a>
       <div class="styles" role="group" aria-label="Stile mappa" id="styles"></div>
+      <a class="powered" href="https://landec.io" target="_blank" rel="noopener"
+         aria-label="Powered by Landec">Powered by <strong>Landec</strong></a>
     </div>
     <p class="notice" id="notice" role="status" hidden></p>
 
