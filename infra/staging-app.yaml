@@ -19,7 +19,7 @@ static_sites:
 - environment_slug: html
   github:
     branch: main
-    deploy_on_push: false
+    deploy_on_push: true
     repo: landecglobal/redeep
   name: redeep-platform-apps-web
   source_dir: /

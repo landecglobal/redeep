@@ -16,30 +16,19 @@
         --hover: #f3f4f6;
         --accent: #2563eb;
         --accent-soft: #eff6ff;
+        --danger: #b91c1c;
         --rail: 44px;
-        --panel-w: 300px;
+        --panel-w: 310px;
         --status-h: 26px;
         font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
       }
 
       * { box-sizing: border-box; }
-
-      html, body {
-        margin: 0;
-        height: 100%;
-        overflow: hidden;
-        background: var(--bg);
-        color: var(--text);
-        font-size: 14px;
-      }
-
+      html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-size: 14px; }
       button { font: inherit; color: inherit; }
+      svg[hidden], [hidden] { display: none !important; }
 
-      .app {
-        position: fixed;
-        inset: 0 0 var(--status-h) 0;
-        display: flex;
-      }
+      .app { position: fixed; inset: 0 0 var(--status-h) 0; display: flex; }
 
       /* Left icon rail */
       .rail {
@@ -49,123 +38,102 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-top: 8px;
-        z-index: 3;
-      }
-
-      .rail button {
-        width: 34px;
-        border: 0;
-        background: transparent;
-        border-radius: 8px;
-        padding: 8px 0;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         gap: 6px;
-        color: var(--muted);
+        padding-top: 8px;
+        z-index: 4;
       }
-
+      .rail button {
+        width: 34px; border: 0; background: transparent; border-radius: 8px; padding: 8px 0; cursor: pointer;
+        display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--muted);
+      }
       .rail button[aria-pressed="true"] { background: var(--hover); color: var(--text); }
       .rail button:hover { color: var(--text); }
-      .rail .vlabel { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+      .vlabel { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 
-      /* Layer panel */
+      /* Side panels (Browser / Layer) */
       .panel {
-        flex: 0 0 var(--panel-w);
-        width: var(--panel-w);
-        border-right: 1px solid var(--line);
-        background: var(--panel);
-        display: flex;
-        flex-direction: column;
-        z-index: 3;
+        flex: 0 0 var(--panel-w); width: var(--panel-w);
+        border-right: 1px solid var(--line); background: var(--panel);
+        display: flex; flex-direction: column; z-index: 3; position: relative;
       }
-
-      .panel[hidden] { display: none; }
-
-      .panel-head {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 10px 10px 10px 14px;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .panel-head h2 { margin: 0; font-size: 15px; font-weight: 600; flex: 1; }
+      .panel-head { display: flex; align-items: center; gap: 2px; padding: 9px 8px 9px 14px; border-bottom: 1px solid var(--line); }
+      .panel-head h2 { margin: 0 6px 0 0; font-size: 15px; font-weight: 600; flex: 1; }
+      .panel-body { flex: 1; overflow: auto; padding: 10px; }
+      .panel-foot { border-top: 1px solid var(--line); padding: 10px; }
+      .hint { color: var(--muted); font-size: 13px; margin: 2px 4px 10px; line-height: 1.45; }
 
       .icon-btn {
-        border: 0;
-        background: transparent;
-        border-radius: 6px;
-        width: 28px;
-        height: 28px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        color: var(--text);
+        border: 0; background: transparent; border-radius: 6px; width: 28px; height: 28px;
+        display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); flex: 0 0 auto;
       }
-
       .icon-btn:hover { background: var(--hover); }
-      svg[hidden] { display: none; }
-      .icon-btn:focus-visible, .rail button:focus-visible, .basemap-grid button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+      .icon-btn:disabled { opacity: 0.35; cursor: default; background: none; }
+      .icon-btn[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+      .icon-btn.danger:hover { background: #fee2e2; color: var(--danger); }
+      .icon-btn:focus-visible, .rail button:focus-visible, .tree button:focus-visible, .basemap-grid button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-      .panel-body { flex: 1; overflow: auto; padding: 12px 10px; }
-      .panel-body .hint { color: var(--muted); font-size: 13px; margin: 2px 4px 12px; line-height: 1.45; }
-
-      .layer-card {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 10px 10px 8px;
+      .field { position: relative; }
+      .field input {
+        width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px 8px 32px; font: inherit; font-size: 13px; background: #fff;
       }
+      .field input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+      .field svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+      .field-msg { font-size: 12px; color: var(--muted); margin: 6px 2px 0; min-height: 1em; }
 
+      /* Browser tree */
+      .tree { margin: 8px 0 0; padding: 0; }
+      .tree details { margin: 0 0 2px; }
+      .tree summary {
+        list-style: none; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 4px; border-radius: 6px; font-weight: 600;
+      }
+      .tree summary::-webkit-details-marker { display: none; }
+      .tree summary:hover { background: var(--hover); }
+      .tree summary .chev { display: inline-flex; transition: transform 0.15s; color: var(--muted); }
+      .tree details[open] > summary .chev { transform: rotate(90deg); }
+      .tree summary .count { margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 500; }
+      .tree .items { list-style: none; margin: 0; padding: 0 0 4px 22px; }
+      .tree .items li { display: flex; align-items: center; gap: 8px; padding: 3px 4px; border-radius: 6px; min-height: 34px; }
+      .tree .items li:hover { background: var(--hover); }
+      .tree .items .label { flex: 1; min-width: 0; }
+      .tree .items .label b { display: block; font-weight: 500; }
+      .tree .items .label small { display: block; color: var(--muted); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .tree .items .empty { color: var(--muted); font-size: 12.5px; padding: 2px 4px 6px; min-height: 0; }
+      .tree .items li.off { opacity: 0.5; }
+      .chip { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0, 0, 0, 0.15); flex: 0 0 auto; }
+      .tag { font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+      .tag.on { color: var(--accent); font-weight: 600; }
+
+      /* Layer cards */
+      .cards { display: flex; flex-direction: column; gap: 8px; }
+      .layer-card { border: 1px solid var(--line); border-radius: 8px; padding: 8px 8px 6px; background: #fff; }
       .layer-card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-
-      .layer-row { display: flex; align-items: center; gap: 6px; }
-      .layer-row .grip { color: #c0c4cc; font-size: 12px; letter-spacing: -2px; cursor: default; user-select: none; }
-      .layer-row .name { flex: 1; font-weight: 600; cursor: pointer; border: 0; background: none; text-align: left; padding: 2px 0; display: flex; align-items: center; gap: 6px; }
-      .layer-row .kind { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
-
-      .opacity { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+      .layer-row { display: flex; align-items: center; gap: 2px; }
+      .layer-row .grip { color: #c0c4cc; font-size: 12px; letter-spacing: -2px; user-select: none; }
+      .layer-row .name {
+        flex: 1; min-width: 0; font-weight: 600; cursor: pointer; border: 0; background: none; text-align: left; padding: 2px 4px;
+        display: flex; align-items: center; gap: 6px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+      }
+      .layer-row .kind { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 2px; white-space: nowrap; }
+      .opacity { display: flex; align-items: center; gap: 8px; margin: 6px 2px 2px; font-size: 11px; color: var(--muted); }
       .opacity input { flex: 1; accent-color: var(--accent); }
       .opacity output { font-family: ui-monospace, Menlo, Consolas, monospace; min-width: 30px; text-align: right; }
+      .tools { display: flex; align-items: center; margin-top: 4px; }
+      .tools .icon-btn { width: 26px; height: 26px; }
+      .tools .grow { flex: 1; }
+      .card-info { font-size: 12px; color: var(--muted); margin: 6px 4px 2px; line-height: 1.45; }
 
       .menu {
-        position: absolute;
-        z-index: 20;
-        min-width: 210px;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
-        padding: 4px;
+        position: fixed; z-index: 40; min-width: 220px; background: var(--panel); border: 1px solid var(--line);
+        border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14); padding: 4px;
       }
-
-      .menu[hidden] { display: none; }
       .menu button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 7px 10px; border-radius: 6px; cursor: pointer; }
       .menu button:hover { background: var(--hover); }
-
-      .panel-foot { border-top: 1px solid var(--line); padding: 10px; }
-
-      .search { position: relative; }
-      .search input {
-        width: 100%;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        padding: 8px 10px 8px 32px;
-        font: inherit;
-        font-size: 13px;
-      }
-      .search input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
-      .search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
-      .search-msg { font-size: 12px; color: var(--muted); margin: 6px 2px 0; min-height: 1em; }
+      .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
 
       /* Map */
       .map-wrap { position: relative; flex: 1; min-width: 0; }
       #map {
-        position: absolute;
-        inset: 0;
+        position: absolute; inset: 0;
         background:
           radial-gradient(1px 1px at 12% 22%, #fff9 50%, transparent 51%),
           radial-gradient(1px 1px at 68% 14%, #fff8 50%, transparent 51%),
@@ -177,143 +145,148 @@
           radial-gradient(ellipse at center, #0b1a33 0%, #050b18 70%);
         background-size: 230px 230px, 310px 310px, 270px 270px, 190px 190px, 350px 350px, 160px 160px, 400px 400px, 100% 100%;
       }
-      #map.hidden-basemap .maplibregl-canvas { visibility: hidden; }
       #map.flat { background: #f3f4f6; }
-
-      .maplibregl-ctrl-group button.ctrl-active .ctrl-ico { color: var(--accent); }
+      #map.picking .maplibregl-canvas-container, #map.measuring .maplibregl-canvas-container { cursor: crosshair; }
       .ctrl-ico { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #333; }
+      .maplibregl-ctrl-group button.ctrl-active { background: var(--accent-soft); }
+      .maplibregl-ctrl-group button.ctrl-active .ctrl-ico { color: var(--accent); }
+
+      .tool-box {
+        position: absolute; top: 10px; left: 10px; z-index: 5; background: #fff; border-radius: 8px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+        padding: 8px 10px; font-size: 13px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; max-width: calc(100% - 80px);
+      }
+      .tool-box strong { font-weight: 600; }
+      .tool-box .small-btn { border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 12.5px; }
+      .tool-box .small-btn:hover { background: var(--hover); }
+
+      .maplibregl-popup-content { padding: 10px 12px; font-size: 12.5px; max-width: 300px; }
+      .feat { margin: 0 0 8px; }
+      .feat:last-child { margin-bottom: 0; }
+      .feat h4 { margin: 0 0 3px; font-size: 13px; }
+      .feat .grp { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+      .feat table { border-collapse: collapse; margin-top: 3px; }
+      .feat td { padding: 1px 8px 1px 0; vertical-align: top; }
+      .feat td:first-child { color: var(--muted); }
 
       /* Status bar */
       .status {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: var(--status-h);
-        border-top: 1px solid var(--line);
-        background: var(--panel);
-        display: flex;
-        align-items: center;
-        gap: 22px;
-        padding: 0 12px;
-        font-family: ui-monospace, Menlo, Consolas, monospace;
-        font-size: 11.5px;
-        color: #374151;
-        white-space: nowrap;
-        overflow: hidden;
+        position: fixed; left: 0; right: 0; bottom: 0; height: var(--status-h); border-top: 1px solid var(--line); background: var(--panel);
+        display: flex; align-items: center; gap: 22px; padding: 0 12px; font-family: ui-monospace, Menlo, Consolas, monospace;
+        font-size: 11.5px; color: #374151; white-space: nowrap; overflow: hidden;
       }
 
       /* Basemap dialog */
-      dialog.basemaps {
-        border: 0;
-        border-radius: 12px;
-        padding: 22px 24px 24px;
-        width: min(560px, calc(100vw - 32px));
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      }
+      dialog.basemaps { border: 0; border-radius: 12px; padding: 22px 24px 24px; width: min(560px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
       dialog.basemaps::backdrop { background: rgba(0, 0, 0, 0.45); }
       dialog.basemaps h3 { margin: 0 0 4px; font-size: 18px; }
       dialog.basemaps p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
       dialog.basemaps .close { position: absolute; top: 14px; right: 14px; }
       .basemap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-      .basemap-grid button {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        border-radius: 8px;
-        padding: 0 0 10px;
-        cursor: pointer;
-        overflow: hidden;
-        font-weight: 600;
-        text-align: center;
-      }
+      .basemap-grid button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 0 0 10px; cursor: pointer; overflow: hidden; font-weight: 600; text-align: center; }
       .basemap-grid button:hover { border-color: #9ca3af; }
       .basemap-grid button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: var(--accent-soft); }
-      .basemap-grid .swatch { display: block; height: 54px; margin-bottom: 8px; }
+      .basemap-grid .sw { display: block; height: 54px; margin-bottom: 8px; }
       .basemap-grid small { display: block; font-weight: 400; color: var(--muted); font-size: 11.5px; margin-top: 2px; padding: 0 6px; }
 
       .notice {
-        position: fixed;
-        left: 50%;
-        bottom: 44px;
-        transform: translateX(-50%);
-        z-index: 30;
-        max-width: calc(100% - 32px);
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-size: 14px;
-        color: #fff;
-        background: rgba(153, 27, 27, 0.92);
+        position: fixed; left: 50%; bottom: 44px; transform: translateX(-50%); z-index: 30; max-width: calc(100% - 32px);
+        padding: 10px 14px; border-radius: 10px; font-size: 14px; color: #fff; background: rgba(17, 24, 39, 0.92);
       }
-      .notice[hidden] { display: none; }
 
-      /* Phones: the panel floats over the map. */
       @media (max-width: 720px) {
-        :root { --panel-w: min(300px, calc(100vw - var(--rail) - 16px)); }
+        :root { --panel-w: min(310px, calc(100vw - var(--rail) - 16px)); }
         .panel { position: absolute; left: var(--rail); top: 0; bottom: 0; box-shadow: 8px 0 24px rgba(0, 0, 0, 0.15); }
         .status .wide { display: none; }
+        .basemap-grid { grid-template-columns: repeat(2, 1fr); }
       }
     </style>
   </head>
   <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></g></symbol>
+        <symbol id="i-browser" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></g></symbol>
+        <symbol id="i-map" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></g></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+        <symbol id="i-eye-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.9 0 3.6-.6 5-1.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></symbol>
+        <symbol id="i-pick" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l7 17 2.5-7.5L21 11z"/></g></symbol>
+        <symbol id="i-collapse" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/></g></symbol>
+        <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-zoom" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></g></symbol>
+        <symbol id="i-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.2 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></g></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></g></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></g></symbol>
+        <symbol id="i-more" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></g></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></g></symbol>
+        <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></g></symbol>
+        <symbol id="i-ruler" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 17 3l4 4L7 21z"/><path d="m7 13 2 2M10 10l2 2M13 7l2 2"/></g></symbol>
+        <symbol id="i-camera" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></g></symbol>
+      </defs>
+    </svg>
+
     <div class="app">
       <nav class="rail" aria-label="Pannelli">
-        <button type="button" id="rail-layers" aria-pressed="true" aria-controls="panel" title="Layer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7l10-5z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></svg>
+        <button type="button" id="rail-browser" aria-pressed="false" aria-controls="browser" title="Browser">
+          <svg width="18" height="18" aria-hidden="true"><use href="#i-browser"/></svg>
+          <span class="vlabel">Browser</span>
+        </button>
+        <button type="button" id="rail-layers" aria-pressed="true" aria-controls="layers" title="Layer">
+          <svg width="18" height="18" aria-hidden="true"><use href="#i-layers"/></svg>
           <span class="vlabel">Layer</span>
         </button>
       </nav>
 
-      <aside class="panel" id="panel" aria-label="Layer">
+      <!-- Browser: what can be put on the map -->
+      <aside class="panel" id="browser" aria-label="Browser" hidden>
         <div class="panel-head">
-          <h2>Layer</h2>
-          <button type="button" class="icon-btn" id="open-basemaps" title="Cambia sfondo" aria-label="Cambia sfondo">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>
-          </button>
-          <button type="button" class="icon-btn" id="close-panel" title="Chiudi pannello" aria-label="Chiudi pannello">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M16 15l-3-3 3-3"/></svg>
-          </button>
+          <h2>Browser</h2>
+          <button type="button" class="icon-btn" data-close-panel title="Chiudi pannello" aria-label="Chiudi pannello"><svg width="17" height="17"><use href="#i-collapse"/></svg></button>
         </div>
         <div class="panel-body">
-          <p class="hint">Mappe di base Redeep. Clicca su «Sfondo» per scegliere la mappa.</p>
-          <div class="layer-card" id="basemap-card">
-            <div class="layer-row">
-              <span class="grip" aria-hidden="true">⋮⋮</span>
-              <button type="button" class="icon-btn" id="basemap-eye" aria-pressed="true" title="Nascondi sfondo" aria-label="Nascondi sfondo">
-                <svg id="eye-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-                <svg id="eye-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6C3.8 8.4 2 12 2 12s3.5 7 10 7c1.9 0 3.6-.6 5-1.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
-              </button>
-              <button type="button" class="name" id="basemap-name" title="Cambia sfondo">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7l10-5z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></svg>
-                <span>Sfondo</span>
-              </button>
-              <span class="kind" id="basemap-kind">Dark</span>
-              <button type="button" class="icon-btn" id="basemap-more" title="Altre azioni" aria-label="Altre azioni" aria-haspopup="menu">⋯</button>
-            </div>
-            <div class="opacity">
-              <label for="basemap-opacity">Opacità</label>
-              <input type="range" id="basemap-opacity" min="0" max="1" step="0.05" value="1" />
-              <output id="basemap-opacity-out" for="basemap-opacity">1.00</output>
-            </div>
+          <div class="field">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" id="browser-q" placeholder="Cerca sorgenti dati" aria-label="Cerca sorgenti dati" autocomplete="off" />
           </div>
-          <div class="menu" id="basemap-menu" role="menu" hidden>
-            <button type="button" role="menuitem" data-cmd="change">Cambia sfondo…</button>
-            <button type="button" role="menuitem" data-cmd="globe">Vista globo</button>
-            <button type="button" role="menuitem" data-cmd="world">Zoom sul mondo</button>
-            <button type="button" role="menuitem" data-cmd="italy">Zoom sull'Italia</button>
-            <button type="button" role="menuitem" data-cmd="reset">Ripristina opacità e visibilità</button>
-          </div>
+          <div class="tree" id="tree"></div>
+        </div>
+      </aside>
+
+      <!-- Layer: what is on the map -->
+      <aside class="panel" id="layers" aria-label="Layer">
+        <div class="panel-head">
+          <h2>Layer</h2>
+          <button type="button" class="icon-btn" id="h-add" title="Aggiungi dal Browser" aria-label="Aggiungi dal Browser"><svg width="17" height="17"><use href="#i-plus"/></svg></button>
+          <button type="button" class="icon-btn" id="h-basemap" title="Cambia sfondo" aria-label="Cambia sfondo"><svg width="17" height="17"><use href="#i-map"/></svg></button>
+          <button type="button" class="icon-btn" id="h-eye" title="Mostra / nascondi tutti" aria-label="Mostra o nascondi tutti i layer"><svg width="17" height="17"><use href="#i-eye"/></svg></button>
+          <button type="button" class="icon-btn" id="h-pick" aria-pressed="false" title="Informazioni: clicca un oggetto sulla mappa" aria-label="Strumento informazioni"><svg width="17" height="17"><use href="#i-pick"/></svg></button>
+          <button type="button" class="icon-btn" data-close-panel title="Chiudi pannello" aria-label="Chiudi pannello"><svg width="17" height="17"><use href="#i-collapse"/></svg></button>
+        </div>
+        <div class="panel-body">
+          <p class="hint">Lo «Sfondo» è la mappa di base Redeep. Dal Browser puoi aggiungerne le componenti (edifici, strade, acque…) come layer separati, per nasconderle o cambiarne colore, opacità e ordine.</p>
+          <div class="cards" id="cards"></div>
         </div>
         <div class="panel-foot">
-          <form class="search" id="goto" autocomplete="off">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-            <input type="search" id="goto-input" placeholder="Vai a coordinate: 45.07, 7.68" aria-label="Vai a coordinate (latitudine, longitudine)" />
+          <form class="field" id="goto" autocomplete="off">
+            <svg width="15" height="15" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" id="goto-input" placeholder="Cerca layer o coordinate (45.07, 7.68)" aria-label="Cerca layer o vai a coordinate" />
           </form>
-          <p class="search-msg" id="goto-msg" role="status"></p>
+          <p class="field-msg" id="goto-msg" role="status"></p>
         </div>
       </aside>
 
       <div class="map-wrap">
         <div id="map" role="region" aria-label="Mappa"></div>
+        <div class="tool-box" id="measure-box" hidden>
+          <strong>Misura</strong>
+          <span id="measure-out">Clicca sulla mappa per aggiungere punti, doppio clic per chiudere l'area.</span>
+          <button type="button" class="small-btn" id="measure-undo">Annulla punto</button>
+          <button type="button" class="small-btn" id="measure-clear">Cancella</button>
+          <button type="button" class="small-btn" id="measure-close">Chiudi</button>
+        </div>
       </div>
     </div>
 
@@ -332,67 +305,142 @@
       <div class="basemap-grid" id="basemap-grid"></div>
     </dialog>
 
+    <div class="menu" id="menu" role="menu" hidden></div>
+    <input type="color" id="color-input" hidden />
     <p class="notice" id="notice" role="status" hidden></p>
 
     <script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js"></script>
     <script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
     <script>
       (function () {
+        "use strict";
         // Basemap assets on DigitalOcean Spaces (CDN): planet.pmtiles, fonts/, sprites/, natural_earth/
         var TILES_BASE = "https://redeep-tiles.ams3.cdn.digitaloceanspaces.com";
         var ATTRIBUTION =
           '<a href="https://openmaptiles.org/" target="_blank" rel="noopener">&copy; OpenMapTiles</a> ' +
           '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">&copy; OpenStreetMap contributors</a>';
         var STYLES = [
-          { id: "dark", label: "Dark", note: "scuro, per i dati", swatch: "linear-gradient(135deg,#0e0e0e,#2b2b2b 60%,#3d3d3d)" },
-          { id: "positron", label: "Positron", note: "chiaro e neutro", swatch: "linear-gradient(135deg,#f2f3f0,#dcdcdc 60%,#c6d6e0)" },
-          { id: "liberty", label: "Liberty", note: "classico, con edifici", swatch: "linear-gradient(135deg,#f8f4f0,#e3dccb 45%,#a0c8f0 80%)" },
-          { id: "bright", label: "Bright", note: "colori vivaci", swatch: "linear-gradient(135deg,#f8f4f0,#fdd27d 50%,#8fd38f)" },
-          { id: "fiord", label: "Fiord", note: "blu notte", swatch: "linear-gradient(135deg,#45516e,#38435c 55%,#2c354a)" },
+          { id: "dark", label: "Dark", note: "scuro, per i dati", sw: "linear-gradient(135deg,#0e0e0e,#2b2b2b 60%,#3d3d3d)" },
+          { id: "positron", label: "Positron", note: "chiaro e neutro", sw: "linear-gradient(135deg,#f2f3f0,#dcdcdc 60%,#c6d6e0)" },
+          { id: "liberty", label: "Liberty", note: "classico, con edifici 3D", sw: "linear-gradient(135deg,#f8f4f0,#e3dccb 45%,#a0c8f0 80%)" },
+          { id: "bright", label: "Bright", note: "colori vivaci", sw: "linear-gradient(135deg,#f8f4f0,#fdd27d 50%,#8fd38f)" },
+          { id: "fiord", label: "Fiord", note: "blu notte", sw: "linear-gradient(135deg,#45516e,#38435c 55%,#2c354a)" },
+        ];
+        // Components of the basemap, by OpenMapTiles source layer. Whatever is not listed stays in "Sfondo".
+        var GROUPS = [
+          { id: "place", label: "Località", note: "Nomi di stati, regioni, città, paesi e quartieri", src: ["place"], color: "#1f2937" },
+          { id: "poi", label: "Punti di interesse", note: "Negozi, servizi, monumenti, aeroporti", src: ["poi", "aerodrome_label", "mountain_peak"], color: "#7c3aed" },
+          { id: "housenumber", label: "Numeri civici", note: "Visibili da vicino (zoom 17 e oltre)", src: ["housenumber"], color: "#6b7280" },
+          { id: "boundary", label: "Confini", note: "Confini di stati e regioni amministrative", src: ["boundary"], color: "#9333ea" },
+          { id: "transport", label: "Strade e ferrovie", note: "Strade, autostrade, ferrovie, piste e nomi delle vie", src: ["transportation", "transportation_name", "aeroway"], color: "#f59e0b" },
+          { id: "building", label: "Edifici", note: "Sagome degli edifici, in 3D nello stile Liberty", src: ["building"], color: "#94a3b8" },
+          { id: "water", label: "Acque", note: "Mari, laghi, fiumi, canali e i loro nomi", src: ["water", "waterway", "water_name"], color: "#3b82f6" },
+          { id: "land", label: "Territorio e verde", note: "Boschi, prati, parchi, aree urbane e agricole", src: ["landcover", "landuse", "park"], color: "#22c55e" },
+          { id: "relief", label: "Rilievo", note: "Rilievo ombreggiato Natural Earth (stile Liberty)", raster: "ne2_shaded", color: "#a16207" },
         ];
         var ITALY = [[6.5, 36.4], [18.6, 47.2]];
+        var OPACITY_PROPS = {
+          fill: ["fill-opacity"], line: ["line-opacity"], symbol: ["text-opacity", "icon-opacity"], raster: ["raster-opacity"],
+          "fill-extrusion": ["fill-extrusion-opacity"], background: ["background-opacity"], circle: ["circle-opacity", "circle-stroke-opacity"],
+        };
+        var COLOR_PROPS = { fill: ["fill-color"], line: ["line-color"], symbol: ["text-color"], "fill-extrusion": ["fill-extrusion-color"], circle: ["circle-color"] };
 
         var $ = function (id) { return document.getElementById(id); };
         var notice = $("notice");
-        function showNotice(message) { notice.textContent = message; notice.hidden = false; }
+        var noticeTimer = null;
+        function showNotice(message, sticky) {
+          notice.textContent = message;
+          notice.hidden = false;
+          clearTimeout(noticeTimer);
+          if (!sticky) noticeTimer = setTimeout(function () { notice.hidden = true; }, 5000);
+        }
+        function el(tag, attrs, children) {
+          var e = document.createElement(tag);
+          Object.keys(attrs || {}).forEach(function (k) {
+            if (k === "text") e.textContent = attrs[k];
+            else if (k === "class") e.className = attrs[k];
+            else if (k.indexOf("on") === 0) e.addEventListener(k.slice(2), attrs[k]);
+            else e.setAttribute(k, attrs[k]);
+          });
+          (children || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+          return e;
+        }
+        function icon(name, size) {
+          var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          s.setAttribute("width", size || 16);
+          s.setAttribute("height", size || 16);
+          s.setAttribute("aria-hidden", "true");
+          var u = document.createElementNS("http://www.w3.org/2000/svg", "use");
+          u.setAttribute("href", "#i-" + name);
+          s.appendChild(u);
+          return s;
+        }
+        function iconBtn(name, title, onclick, extra) {
+          return el("button", Object.assign({ type: "button", class: "icon-btn", title: title, "aria-label": title, onclick: onclick }, extra || {}), [icon(name)]);
+        }
+        function chip(color) { return el("span", { class: "chip", style: "background:" + color }); }
 
         if (!window.maplibregl || !window.pmtiles) {
-          showNotice("Impossibile caricare la mappa. Ricarica la pagina.");
+          showNotice("Impossibile caricare la mappa. Ricarica la pagina.", true);
           return;
         }
 
-        // Per-viewer preferences (style, panel, globe). Storage can be unavailable: defaults then.
-        function load(key, fallback) { try { var v = localStorage.getItem(key); return v === null ? fallback : v; } catch (e) { return fallback; } }
-        function save(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+        // Per-viewer preferences. Storage can be unavailable: defaults then.
+        function load(key, fallback) { try { var v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } }
+        function save(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} }
 
         var protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
 
-        var styleCache = {};
-        function loadStyle(id) {
-          if (styleCache[id]) return Promise.resolve(JSON.parse(JSON.stringify(styleCache[id])));
-          return fetch("./styles/" + id + ".json")
-            .then(function (response) {
-              if (!response.ok) throw new Error("Stile non trovato: " + id);
-              return response.json();
-            })
-            .then(function (style) {
-              // OpenFreeMap styles ship with __TILEJSON_DOMAIN__ placeholders: point them at our bucket.
-              style.sources.openmaptiles = { type: "vector", url: "pmtiles://" + TILES_BASE + "/planet.pmtiles", attribution: ATTRIBUTION };
-              if (style.sources.ne2_shaded) style.sources.ne2_shaded.tiles = [TILES_BASE + "/natural_earth/ne2sr/{z}/{x}/{y}.png"];
-              style.sprite = TILES_BASE + "/sprites/ofm_f384/ofm";
-              style.glyphs = TILES_BASE + "/fonts/{fontstack}/{range}.pbf";
-              styleCache[id] = style;
-              return JSON.parse(JSON.stringify(style));
-            });
-        }
-
-        var current = load("redeep-map-style", "dark");
-        if (!STYLES.some(function (s) { return s.id === current; })) current = "dark";
-        var globe = load("redeep-map-globe", "0") === "1";
+        // ------------------------------------------------------------------ state
+        var styleId = load("rd.style", "dark");
+        if (!STYLES.some(function (s) { return s.id === styleId; })) styleId = "dark";
+        var globe = load("rd.globe", false) === true;
+        var base = load("rd.base", null) || { visible: true, opacity: 1 };
+        // Components taken out of "Sfondo", top to bottom: { id, visible, opacity, color }
+        var comps = (load("rd.comps", []) || []).filter(function (c) { return c && GROUPS.some(function (g) { return g.id === c.id; }); });
+        var recent = (load("rd.recent", []) || []).filter(function (r) { return r && (r.kind === "style" || r.kind === "comp"); });
+        var styleJson = null; // pristine copy of the current style (original paint values)
         var map;
         var failed = false;
 
+        function persist() { save("rd.base", base); save("rd.comps", comps); }
+        function groupOf(layer) {
+          for (var i = 0; i < GROUPS.length; i++) {
+            var g = GROUPS[i];
+            if (g.raster && layer.source === g.raster) return g.id;
+            if (g.src && g.src.indexOf(layer["source-layer"]) >= 0) return g.id;
+          }
+          return null;
+        }
+        function groupDef(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+        function styleDef(id) { return STYLES.filter(function (s) { return s.id === id; })[0]; }
+        function comp(id) { return comps.filter(function (c) { return c.id === id; })[0]; }
+        function layersOf(gid) { return styleJson ? styleJson.layers.filter(function (l) { return groupOf(l) === gid; }) : []; }
+        function presentGroups() { return GROUPS.filter(function (g) { return layersOf(g.id).length > 0; }); }
+        function pushRecent(item) {
+          recent = [item].concat(recent.filter(function (r) { return !(r.kind === item.kind && r.id === item.id); })).slice(0, 6);
+          save("rd.recent", recent);
+        }
+
+        // ------------------------------------------------------------------ style
+        var styleCache = {};
+        function loadStyle(id) {
+          var ready = styleCache[id]
+            ? Promise.resolve(styleCache[id])
+            : fetch("./styles/" + id + ".json")
+                .then(function (r) { if (!r.ok) throw new Error("Stile non trovato: " + id); return r.json(); })
+                .then(function (style) {
+                  // OpenFreeMap styles ship with __TILEJSON_DOMAIN__ placeholders: point them at our bucket.
+                  style.sources.openmaptiles = { type: "vector", url: "pmtiles://" + TILES_BASE + "/planet.pmtiles", attribution: ATTRIBUTION };
+                  if (style.sources.ne2_shaded) style.sources.ne2_shaded.tiles = [TILES_BASE + "/natural_earth/ne2sr/{z}/{x}/{y}.png"];
+                  style.sprite = TILES_BASE + "/sprites/ofm_f384/ofm";
+                  style.glyphs = TILES_BASE + "/fonts/{fontstack}/{range}.pbf";
+                  styleCache[id] = style;
+                  return style;
+                });
+          return ready.then(function (s) { return JSON.parse(JSON.stringify(s)); });
+        }
         function withProjection(style) {
           style.projection = { type: globe ? "globe" : "mercator" };
           // Atmosphere around the globe; outside it the starry background of #map shows through.
@@ -400,193 +448,518 @@
           return style;
         }
 
-        // ---------------------------------------------------------------- panel
-        var panel = $("panel");
-        var railLayers = $("rail-layers");
-        function setPanel(open) {
-          panel.hidden = !open;
-          railLayers.setAttribute("aria-pressed", String(open));
-          save("redeep-map-panel", open ? "1" : "0");
+        // Opacity goes through paint properties (so each component can have its own): the outputs of zoom
+        // curves are scaled, plain values multiplied.
+        function hasZoom(v) { return JSON.stringify(v).indexOf('"zoom"') >= 0; }
+        function scale(v, k) {
+          if (k === 1) return v;
+          if (v === undefined || v === null) return k;
+          if (typeof v === "number") return v * k;
+          if (Array.isArray(v)) {
+            if (v[0] === "interpolate" || v[0] === "interpolate-hcl" || v[0] === "interpolate-lab") {
+              return v.map(function (x, i) { return i >= 3 && (i - 3) % 2 === 1 ? scale(x, k) : x; });
+            }
+            if (v[0] === "step") return v.map(function (x, i) { return i >= 2 && i % 2 === 0 ? scale(x, k) : x; });
+            return hasZoom(v) ? v : ["*", v, k];
+          }
+          if (typeof v === "object" && v.stops) {
+            return Object.assign({}, v, { stops: v.stops.map(function (s) { return [s[0], typeof s[1] === "number" ? s[1] * k : s[1]]; }) });
+          }
+          return v;
+        }
+        function setPaint(id, prop, value) {
+          try { map.setPaintProperty(id, prop, value); } catch (e) { /* a value the style does not accept: keep the original */ }
+        }
+
+        /** Applies visibility, opacity, colour and order of "Sfondo" and of the separated components. */
+        function applyState() {
+          if (!map || !styleJson || !map.getStyle()) return;
+          styleJson.layers.forEach(function (l) {
+            if (!map.getLayer(l.id)) return;
+            var c = comp(groupOf(l));
+            var visible = c ? c.visible : base.visible;
+            var origVis = (l.layout && l.layout.visibility) || "visible";
+            map.setLayoutProperty(l.id, "visibility", visible ? origVis : "none");
+            var k = Number(c ? c.opacity : base.opacity);
+            (OPACITY_PROPS[l.type] || []).forEach(function (p) {
+              var orig = l.paint ? l.paint[p] : undefined;
+              setPaint(l.id, p, k === 1 ? orig : scale(orig, k));
+            });
+            (COLOR_PROPS[l.type] || []).forEach(function (p) {
+              var orig = l.paint ? l.paint[p] : undefined;
+              setPaint(l.id, p, c && c.color ? c.color : orig);
+            });
+          });
+          // Separated components are drawn above the rest of "Sfondo", in the order of the panel (top = above).
+          for (var i = comps.length - 1; i >= 0; i--) {
+            layersOf(comps[i].id).forEach(function (l) { if (map.getLayer(l.id)) map.moveLayer(l.id); });
+          }
+          ensureMeasureLayers();
+        }
+
+        // ------------------------------------------------------------------ panels
+        var browserPanel = $("browser");
+        var layersPanel = $("layers");
+        function openPanel(which) {
+          browserPanel.hidden = which !== "browser";
+          layersPanel.hidden = which !== "layers";
+          $("rail-browser").setAttribute("aria-pressed", String(which === "browser"));
+          $("rail-layers").setAttribute("aria-pressed", String(which === "layers"));
+          save("rd.panel", which);
           if (map) setTimeout(function () { map.resize(); }, 0);
         }
-        setPanel(load("redeep-map-panel", window.innerWidth > 720 ? "1" : "0") === "1");
-        railLayers.addEventListener("click", function () { setPanel(panel.hidden); });
-        $("close-panel").addEventListener("click", function () { setPanel(false); });
+        $("rail-browser").addEventListener("click", function () { openPanel(browserPanel.hidden ? "browser" : ""); });
+        $("rail-layers").addEventListener("click", function () { openPanel(layersPanel.hidden ? "layers" : ""); });
+        Array.prototype.forEach.call(document.querySelectorAll("[data-close-panel]"), function (b) { b.addEventListener("click", function () { openPanel(""); }); });
+        var startPanel = load("rd.panel", window.innerWidth > 720 ? "layers" : "");
+        openPanel(startPanel === "browser" || startPanel === "layers" ? startPanel : "");
 
-        // ---------------------------------------------------------------- basemap layer card
-        var card = $("basemap-card");
-        var kind = $("basemap-kind");
-        var eye = $("basemap-eye");
-        var opacity = $("basemap-opacity");
-        var opacityOut = $("basemap-opacity-out");
-        var mapEl = $("map");
-        var visible = true;
-
-        function labelOf(id) { return STYLES.filter(function (s) { return s.id === id; })[0].label; }
-        kind.textContent = labelOf(current);
-
-        function setVisible(v) {
-          visible = v;
-          mapEl.classList.toggle("hidden-basemap", !v);
-          eye.setAttribute("aria-pressed", String(v));
-          eye.title = v ? "Nascondi sfondo" : "Mostra sfondo";
-          eye.setAttribute("aria-label", eye.title);
-          $("eye-on").hidden = !v;
-          $("eye-off").hidden = v;
-        }
-        function setOpacity(v) {
-          opacity.value = String(v);
-          opacityOut.value = Number(v).toFixed(2);
-          var canvas = mapEl.querySelector(".maplibregl-canvas");
-          if (canvas) canvas.style.opacity = String(v);
-        }
-        eye.addEventListener("click", function () { setVisible(!visible); });
-        opacity.addEventListener("input", function () { setOpacity(opacity.value); });
-        card.addEventListener("click", function () { card.classList.add("selected"); });
-        document.addEventListener("click", function (e) { if (!card.contains(e.target)) card.classList.remove("selected"); });
-
-        // ⋯ menu
-        var menu = $("basemap-menu");
-        var more = $("basemap-more");
-        function closeMenu() { menu.hidden = true; more.setAttribute("aria-expanded", "false"); }
-        more.addEventListener("click", function (e) {
-          e.stopPropagation();
-          if (!menu.hidden) return closeMenu();
-          var r = more.getBoundingClientRect();
-          var p = panel.getBoundingClientRect();
-          menu.style.top = r.bottom - p.top + 4 + "px";
-          menu.style.left = Math.max(8, r.right - p.left - 210) + "px";
-          menu.querySelector('[data-cmd="globe"]').textContent = globe ? "Vista piana" : "Vista globo";
-          menu.hidden = false;
-          more.setAttribute("aria-expanded", "true");
-          menu.querySelector("button").focus();
-        });
-        document.addEventListener("click", function (e) { if (!menu.contains(e.target)) closeMenu(); });
-        document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
-        menu.addEventListener("click", function (e) {
-          var cmd = e.target.dataset && e.target.dataset.cmd;
-          if (!cmd) return;
+        // ------------------------------------------------------------------ menus
+        var menu = $("menu");
+        function closeMenu() { menu.hidden = true; menu.textContent = ""; }
+        function openMenu(anchor, items) {
           closeMenu();
-          if (cmd === "change") openBasemaps();
-          if (cmd === "globe") setGlobe(!globe);
-          if (cmd === "world" && map) map.flyTo({ center: [12.5, 30], zoom: 1.6, bearing: 0, pitch: 0 });
-          if (cmd === "italy" && map) map.fitBounds(ITALY, { padding: 30 });
-          if (cmd === "reset") { setVisible(true); setOpacity(1); }
+          items.forEach(function (it) {
+            if (it === "-") return menu.appendChild(el("hr"));
+            menu.appendChild(el("button", { type: "button", role: "menuitem", text: it.label, onclick: function () { closeMenu(); it.run(); } }));
+          });
+          var r = anchor.getBoundingClientRect();
+          menu.hidden = false;
+          var w = menu.offsetWidth;
+          menu.style.top = Math.max(8, Math.min(r.bottom + 4, window.innerHeight - menu.offsetHeight - 8)) + "px";
+          menu.style.left = Math.max(8, Math.min(r.right - w, window.innerWidth - w - 8)) + "px";
+          var first = menu.querySelector("button");
+          if (first) first.focus();
+        }
+        document.addEventListener("click", function (e) { if (!menu.hidden && !menu.contains(e.target) && !e.target.closest("[data-menu]")) closeMenu(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") { closeMenu(); stopPick(); stopMeasure(); } });
+
+        // ------------------------------------------------------------------ layer cards
+        var cardsEl = $("cards");
+        var selected = null;
+        var openInfo = {};
+        var colorInput = $("color-input");
+        var colorTarget = null;
+        colorInput.addEventListener("input", function () {
+          var c = comp(colorTarget);
+          if (!c) return;
+          c.color = colorInput.value;
+          persist();
+          applyState();
+          renderLayers();
         });
 
-        // ---------------------------------------------------------------- basemap dialog
+        function moveComp(id, delta) {
+          var i = comps.findIndex(function (c) { return c.id === id; });
+          var j = i + delta;
+          if (i < 0 || j < 0 || j >= comps.length) return;
+          var t = comps[i]; comps[i] = comps[j]; comps[j] = t;
+          persist(); applyState(); renderLayers();
+        }
+        function addComp(id) {
+          if (!comp(id)) comps.unshift({ id: id, visible: true, opacity: 1, color: null });
+          selected = id;
+          pushRecent({ kind: "comp", id: id });
+          persist(); applyState(); renderLayers(); renderTree();
+          openPanel("layers");
+        }
+        function removeComp(id) {
+          comps = comps.filter(function (c) { return c.id !== id; });
+          persist(); applyState(); renderLayers(); renderTree();
+        }
+        function minZoomOf(id) {
+          var zs = layersOf(id).map(function (l) { return l.minzoom || 0; });
+          return zs.length ? Math.min.apply(null, zs) : 0;
+        }
+        function zoomTo(id) {
+          if (!map) return;
+          if (id === "base") return map.flyTo({ center: [12.5, 30], zoom: 1.6, bearing: 0, pitch: 0 });
+          var z = minZoomOf(id);
+          if (map.getZoom() < z + 0.5) map.flyTo({ zoom: Math.min(z + 1, 18) });
+          else showNotice("«" + groupDef(id).label + "» è già visibile a questo zoom (da zoom " + z + ").");
+        }
+        function soloComp(id) {
+          comps.forEach(function (c) { c.visible = c.id === id; });
+          base.visible = false;
+          persist(); applyState(); renderLayers();
+        }
+
+        function card(opts) {
+          var box = el("div", { class: "layer-card" + (selected === opts.id ? " selected" : ""), "data-id": opts.id });
+          box.addEventListener("click", function () {
+            selected = opts.id;
+            Array.prototype.forEach.call(cardsEl.children, function (c) { c.classList.toggle("selected", c.dataset.id === opts.id); });
+          });
+          var eye = iconBtn(opts.visible ? "eye" : "eye-off", opts.visible ? "Nascondi" : "Mostra", function (e) { e.stopPropagation(); opts.onEye(); });
+          var name = el("button", { type: "button", class: "name", title: opts.nameTitle || opts.title, onclick: opts.onName || function () {} }, [
+            opts.color ? chip(opts.color) : icon("layers", 15),
+            el("span", { text: opts.title }),
+          ]);
+          var more = iconBtn("more", "Altre azioni", function (e) { e.stopPropagation(); openMenu(more, opts.menu); }, { "data-menu": "1", "aria-haspopup": "menu" });
+          box.appendChild(el("div", { class: "layer-row" }, [el("span", { class: "grip", "aria-hidden": "true", text: "⋮⋮" }), eye, name, el("span", { class: "kind", text: opts.kind }), more]));
+          var range = el("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(opts.opacity), "aria-label": "Opacità di " + opts.title });
+          var out = el("output", { text: Number(opts.opacity).toFixed(2) });
+          range.addEventListener("input", function () { out.textContent = Number(range.value).toFixed(2); opts.onOpacity(Number(range.value)); });
+          box.appendChild(el("div", { class: "opacity" }, [el("span", { text: "Opacità" }), range, out]));
+          var tools = el("div", { class: "tools" });
+          opts.tools.forEach(function (t) { tools.appendChild(t || el("span", { class: "grow" })); });
+          box.appendChild(tools);
+          if (openInfo[opts.id]) box.appendChild(el("p", { class: "card-info", text: opts.info }));
+          return box;
+        }
+
+        function renderLayers() {
+          cardsEl.textContent = "";
+          var present = presentGroups().map(function (g) { return g.id; });
+          comps.forEach(function (c, i) {
+            var g = groupDef(c.id);
+            var missing = !!styleJson && present.indexOf(c.id) < 0;
+            var up = iconBtn("up", "Sposta sopra", function (e) { e.stopPropagation(); moveComp(c.id, -1); });
+            var down = iconBtn("down", "Sposta sotto", function (e) { e.stopPropagation(); moveComp(c.id, 1); });
+            up.disabled = i === 0;
+            down.disabled = i === comps.length - 1;
+            var palette = iconBtn("palette", "Colore", function (e) {
+              e.stopPropagation();
+              colorTarget = c.id;
+              colorInput.value = c.color || g.color;
+              colorInput.click();
+            });
+            var info = iconBtn("info", "Informazioni", function (e) { e.stopPropagation(); openInfo[c.id] = !openInfo[c.id]; renderLayers(); });
+            var del = iconBtn("trash", "Rimetti nello Sfondo", function (e) { e.stopPropagation(); removeComp(c.id); });
+            del.classList.add("danger");
+            cardsEl.appendChild(card({
+              id: c.id,
+              title: g.label,
+              kind: missing ? "assente" : "componente",
+              color: c.color || g.color,
+              visible: c.visible,
+              opacity: c.opacity,
+              onEye: function () { c.visible = !c.visible; persist(); applyState(); renderLayers(); },
+              onOpacity: function (v) { c.opacity = v; persist(); applyState(); },
+              tools: [up, down, iconBtn("zoom", "Zoom dove è visibile", function (e) { e.stopPropagation(); zoomTo(c.id); }), palette, null, info, del],
+              menu: [
+                { label: "Mostra solo questo", run: function () { soloComp(c.id); } },
+                { label: "Mostra tutti", run: function () { setAll(true); } },
+                { label: "Colore originale", run: function () { c.color = null; persist(); applyState(); renderLayers(); } },
+                { label: "Opacità piena", run: function () { c.opacity = 1; persist(); applyState(); renderLayers(); } },
+                "-",
+                { label: "Rimetti nello Sfondo", run: function () { removeComp(c.id); } },
+              ],
+              info: g.note + ". Visibile da zoom " + minZoomOf(c.id) + "; " + layersOf(c.id).length + " strati di stile." + (missing ? " Non presente nello stile " + styleDef(styleId).label + "." : ""),
+            }));
+          });
+          // "Sfondo" (the basemap) is always last, i.e. at the bottom.
+          var bUp = iconBtn("up", "Lo sfondo resta sotto", function () {}); bUp.disabled = true;
+          var bDown = iconBtn("down", "Lo sfondo resta sotto", function () {}); bDown.disabled = true;
+          var bInfo = iconBtn("info", "Informazioni", function (e) { e.stopPropagation(); openInfo.base = !openInfo.base; renderLayers(); });
+          cardsEl.appendChild(card({
+            id: "base",
+            title: "Sfondo",
+            kind: styleDef(styleId).label,
+            visible: base.visible,
+            opacity: base.opacity,
+            nameTitle: "Cambia sfondo",
+            onName: openBasemaps,
+            onEye: function () { base.visible = !base.visible; persist(); applyState(); renderLayers(); },
+            onOpacity: function (v) { base.opacity = v; persist(); applyState(); },
+            tools: [bUp, bDown, iconBtn("zoom", "Zoom sul mondo", function (e) { e.stopPropagation(); zoomTo("base"); }),
+              iconBtn("map", "Cambia sfondo", function (e) { e.stopPropagation(); openBasemaps(); }), null, bInfo],
+            menu: [
+              { label: "Cambia sfondo…", run: openBasemaps },
+              { label: globe ? "Vista piana" : "Vista globo", run: function () { setGlobe(!globe); renderLayers(); } },
+              { label: "Zoom sul mondo", run: function () { zoomTo("base"); } },
+              { label: "Zoom sull'Italia", run: function () { if (map) map.fitBounds(ITALY, { padding: 30 }); } },
+              "-",
+              { label: "Separa tutte le componenti", run: function () {
+                presentGroups().forEach(function (g) { if (!comp(g.id)) comps.push({ id: g.id, visible: true, opacity: 1, color: null }); });
+                persist(); applyState(); renderLayers(); renderTree();
+              } },
+              { label: "Ripristina tutto", run: resetAll },
+            ],
+            info: "Mappa di base " + styleDef(styleId).label + " da OpenStreetMap (OpenMapTiles), servita dai server Redeep. Le componenti separate sono disegnate sopra lo sfondo.",
+          }));
+          var anyVisible = base.visible || comps.some(function (c) { return c.visible; });
+          $("h-eye").querySelector("use").setAttribute("href", anyVisible ? "#i-eye" : "#i-eye-off");
+        }
+
+        function setAll(v) {
+          base.visible = v;
+          comps.forEach(function (c) { c.visible = v; });
+          persist(); applyState(); renderLayers();
+        }
+        function resetAll() {
+          base = { visible: true, opacity: 1 };
+          comps = [];
+          persist(); applyState(); renderLayers(); renderTree();
+        }
+        $("h-eye").addEventListener("click", function () { setAll(!(base.visible || comps.some(function (c) { return c.visible; }))); });
+        $("h-add").addEventListener("click", function () { openPanel("browser"); $("browser-q").focus(); });
+        $("h-basemap").addEventListener("click", function () { openBasemaps(); });
+
+        // ------------------------------------------------------------------ browser tree
+        var treeEl = $("tree");
+        var treeOpen = load("rd.tree", null) || { basemaps: true, comps: true, recent: true };
+        function section(key, title, count, items) {
+          var d = el("details", treeOpen[key] ? { open: "" } : {});
+          d.addEventListener("toggle", function () { treeOpen[key] = d.open; save("rd.tree", treeOpen); });
+          d.appendChild(el("summary", {}, [el("span", { class: "chev" }, [icon("chev", 14)]), icon("folder", 15), el("span", { text: title }), count != null ? el("span", { class: "count", text: String(count) }) : null]));
+          var ul = el("ul", { class: "items" });
+          if (!items.length) ul.appendChild(el("li", { class: "empty", text: "Vuoto" }));
+          items.forEach(function (li) { ul.appendChild(li); });
+          d.appendChild(ul);
+          return d;
+        }
+        function basemapItem(s) {
+          var on = s.id === styleId;
+          return el("li", { title: "Usa come sfondo" }, [
+            el("span", { class: "chip", style: "background:" + s.sw }),
+            el("span", { class: "label" }, [el("b", { text: s.label }), el("small", { text: s.note })]),
+            on ? el("span", { class: "tag on", text: "in uso" }) : iconBtn("plus", "Usa " + s.label + " come sfondo", function () { selectStyle(s.id); }),
+          ]);
+        }
+        function compItem(g) {
+          var inStyle = layersOf(g.id).length > 0;
+          var added = !!comp(g.id);
+          return el("li", { class: inStyle ? "" : "off", title: g.note }, [
+            chip(g.color),
+            el("span", { class: "label" }, [el("b", { text: g.label }), el("small", { text: inStyle ? g.note : "Non presente nello stile " + styleDef(styleId).label })]),
+            added ? el("span", { class: "tag on", text: "nei layer" }) : inStyle ? iconBtn("plus", "Aggiungi «" + g.label + "» ai layer", function () { addComp(g.id); }) : null,
+          ]);
+        }
+        function renderTree() {
+          var q = $("browser-q").value.trim().toLowerCase();
+          var match = function (t) { return !q || t.toLowerCase().indexOf(q) >= 0; };
+          treeEl.textContent = "";
+          var bm = STYLES.filter(function (s) { return match(s.label + " " + s.note); });
+          var cg = GROUPS.filter(function (g) { return match(g.label + " " + g.note); });
+          var rc = recent.filter(function (r) {
+            var d = r.kind === "style" ? styleDef(r.id) : groupDef(r.id);
+            return d && match(d.label);
+          });
+          treeEl.appendChild(section("basemaps", "Mappe di base", bm.length, bm.map(basemapItem)));
+          treeEl.appendChild(section("comps", "Componenti della mappa", cg.length, cg.map(compItem)));
+          treeEl.appendChild(section("recent", "Recenti", null, rc.map(function (r) { return r.kind === "style" ? basemapItem(styleDef(r.id)) : compItem(groupDef(r.id)); })));
+        }
+        $("browser-q").addEventListener("input", renderTree);
+
+        // ------------------------------------------------------------------ basemap dialog
         var dialog = $("basemaps");
         var grid = $("basemap-grid");
         STYLES.forEach(function (s) {
-          var b = document.createElement("button");
-          b.type = "button";
-          b.dataset.id = s.id;
-          var sw = document.createElement("span");
-          sw.className = "swatch";
-          sw.style.background = s.swatch;
-          var note = document.createElement("small");
-          note.textContent = s.note;
-          b.appendChild(sw);
-          b.appendChild(document.createTextNode(s.label));
-          b.appendChild(note);
-          b.addEventListener("click", function () { selectStyle(s.id); dialog.close(); });
-          grid.appendChild(b);
+          grid.appendChild(el("button", { type: "button", "data-id": s.id, onclick: function () { selectStyle(s.id); dialog.close(); } }, [
+            el("span", { class: "sw", style: "background:" + s.sw }), s.label, el("small", { text: s.note }),
+          ]));
         });
-        function markCurrent() {
-          Array.prototype.forEach.call(grid.children, function (b) { b.setAttribute("aria-pressed", String(b.dataset.id === current)); });
-        }
         function openBasemaps() {
-          markCurrent();
+          Array.prototype.forEach.call(grid.children, function (b) { b.setAttribute("aria-pressed", String(b.dataset.id === styleId)); });
           if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
           var sel = grid.querySelector('[aria-pressed="true"]');
           if (sel) sel.focus();
         }
         $("basemaps-close").addEventListener("click", function () { dialog.close(); });
         dialog.addEventListener("click", function (e) { if (e.target === dialog) dialog.close(); });
-        $("basemap-name").addEventListener("click", openBasemaps);
-        $("open-basemaps").addEventListener("click", openBasemaps);
 
         function selectStyle(id) {
-          if (id === current && map) return;
-          current = id;
-          save("redeep-map-style", id);
-          kind.textContent = labelOf(id);
-          setVisible(true);
+          if (id === styleId && map) return;
+          styleId = id;
+          save("rd.style", id);
+          pushRecent({ kind: "style", id: id });
           loadStyle(id)
-            .then(function (style) { map.setStyle(withProjection(style)); })
+            .then(function (style) {
+              styleJson = JSON.parse(JSON.stringify(style));
+              map.setStyle(withProjection(style));
+              renderLayers();
+              renderTree();
+            })
             .catch(function (error) { showNotice(error.message); });
         }
 
-        // ---------------------------------------------------------------- globe
+        // ------------------------------------------------------------------ globe
         var globeBtn = null;
         function setGlobe(on, apply) {
           globe = on;
-          save("redeep-map-globe", on ? "1" : "0");
-          mapEl.classList.toggle("flat", !on);
-          if (globeBtn) {
-            globeBtn.classList.toggle("ctrl-active", on);
-            globeBtn.title = on ? "Vista piana" : "Vista globo";
-          }
+          save("rd.globe", on);
+          $("map").classList.toggle("flat", !on);
+          if (globeBtn) { globeBtn.classList.toggle("ctrl-active", on); globeBtn.title = on ? "Vista piana" : "Vista globo"; }
           if (map && apply !== false) map.setProjection({ type: on ? "globe" : "mercator" });
         }
-        mapEl.classList.toggle("flat", !globe);
+        $("map").classList.toggle("flat", !globe);
 
-        function GlobeControl() {}
-        GlobeControl.prototype.onAdd = function () {
-          var box = document.createElement("div");
-          box.className = "maplibregl-ctrl maplibregl-ctrl-group";
-          globeBtn = document.createElement("button");
-          globeBtn.type = "button";
-          globeBtn.setAttribute("aria-label", "Vista globo / piana");
-          globeBtn.innerHTML = '<span class="ctrl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>';
-          globeBtn.addEventListener("click", function () { setGlobe(!globe); });
-          box.appendChild(globeBtn);
-          setGlobe(globe, false);
-          return box;
+        function buttonControl(iconName, title, onclick, keep) {
+          return {
+            onAdd: function () {
+              var box = el("div", { class: "maplibregl-ctrl maplibregl-ctrl-group" });
+              var b = el("button", { type: "button", title: title, "aria-label": title, onclick: onclick }, [el("span", { class: "ctrl-ico" }, [icon(iconName, 18)])]);
+              if (keep) keep(b);
+              box.appendChild(b);
+              return box;
+            },
+            onRemove: function () {},
+          };
+        }
+
+        // ------------------------------------------------------------------ identify tool
+        var picking = false;
+        var pickBtn = null;
+        var popup = null;
+        function setPick(on) {
+          picking = on;
+          if (on) stopMeasure();
+          $("map").classList.toggle("picking", on);
+          $("h-pick").setAttribute("aria-pressed", String(on));
+          if (pickBtn) pickBtn.classList.toggle("ctrl-active", on);
+          if (on) showNotice("Clicca un oggetto sulla mappa per vederne le informazioni. Esc per uscire.");
+          if (!on && popup) { popup.remove(); popup = null; }
+        }
+        function stopPick() { if (picking) setPick(false); }
+        $("h-pick").addEventListener("click", function () { setPick(!picking); });
+        var LABELS = {
+          class: "Classe", subclass: "Sottoclasse", admin_level: "Livello amm.", brunnel: "Ponte/galleria", ref: "Sigla", network: "Rete",
+          render_height: "Altezza (m)", ele: "Quota (m)", rank: "Rango", housenumber: "Civico", intermittent: "Intermittente", maritime: "Marittimo", disputed: "Conteso",
         };
-        GlobeControl.prototype.onRemove = function () {};
+        function identify(e) {
+          var feats = map.queryRenderedFeatures(e.point).filter(function (f) { return f.layer && f.sourceLayer; });
+          var seen = {};
+          var list = [];
+          feats.forEach(function (f) {
+            var key = f.sourceLayer + ":" + (f.id != null ? f.id : JSON.stringify(f.properties));
+            if (seen[key] || list.length >= 5) return;
+            seen[key] = 1;
+            list.push(f);
+          });
+          var box = el("div");
+          if (!list.length) box.appendChild(el("p", { style: "margin:0", text: "Nessun oggetto qui." }));
+          list.forEach(function (f) {
+            var p = f.properties || {};
+            var g = groupDef(groupOf({ "source-layer": f.sourceLayer, source: f.source })) || { label: f.sourceLayer };
+            var name = p["name:it"] || p.name || p["name:latin"] || p.housenumber || (p.class ? String(p.class) : "Oggetto");
+            var rows = el("table");
+            Object.keys(p).filter(function (k) { return LABELS[k] && p[k] !== "" && p[k] != null; }).slice(0, 8).forEach(function (k) {
+              rows.appendChild(el("tr", {}, [el("td", { text: LABELS[k] }), el("td", { text: String(p[k]) })]));
+            });
+            if (p.name && p["name:it"] && p.name !== p["name:it"]) rows.appendChild(el("tr", {}, [el("td", { text: "Nome locale" }), el("td", { text: p.name })]));
+            box.appendChild(el("div", { class: "feat" }, [el("span", { class: "grp", text: g.label }), el("h4", { text: name }), rows.children.length ? rows : null]));
+          });
+          if (popup) popup.remove();
+          popup = new maplibregl.Popup({ maxWidth: "320px" }).setLngLat(e.lngLat).setDOMContent(box).addTo(map);
+        }
 
-        function BasemapControl() {}
-        BasemapControl.prototype.onAdd = function () {
-          var box = document.createElement("div");
-          box.className = "maplibregl-ctrl maplibregl-ctrl-group";
-          var b = document.createElement("button");
-          b.type = "button";
-          b.title = "Cambia sfondo";
-          b.setAttribute("aria-label", "Cambia sfondo");
-          b.innerHTML = '<span class="ctrl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></svg></span>';
-          b.addEventListener("click", openBasemaps);
-          box.appendChild(b);
-          return box;
-        };
-        BasemapControl.prototype.onRemove = function () {};
+        // ------------------------------------------------------------------ measure tool
+        var measuring = false;
+        var measureBtn = null;
+        var pts = [];
+        var finished = false;
+        function haversine(a, b) {
+          var R = 6371008.8, r = Math.PI / 180;
+          var dLat = (b[1] - a[1]) * r, dLon = (b[0] - a[0]) * r;
+          var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a[1] * r) * Math.cos(b[1] * r) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+          return 2 * R * Math.asin(Math.sqrt(h));
+        }
+        function ringArea(ring) {
+          // Spherical approximation (as in turf/area), m².
+          var R = 6378137, r = Math.PI / 180, s = 0;
+          for (var i = 0; i < ring.length; i++) {
+            var p1 = ring[i], p2 = ring[(i + 1) % ring.length], p3 = ring[(i + 2) % ring.length];
+            s += (p3[0] * r - p1[0] * r) * Math.sin(p2[1] * r);
+          }
+          return Math.abs((s * R * R) / 2);
+        }
+        function fmtLen(m) { return m >= 1000 ? (m / 1000).toLocaleString("it-IT", { maximumFractionDigits: 2 }) + " km" : Math.round(m).toLocaleString("it-IT") + " m"; }
+        function fmtArea(a) { return a >= 1e6 ? (a / 1e6).toLocaleString("it-IT", { maximumFractionDigits: 2 }) + " km²" : Math.round(a).toLocaleString("it-IT") + " m²"; }
+        function measureData() {
+          var f = [];
+          var closed = finished && pts.length >= 3;
+          if (closed) f.push({ type: "Feature", geometry: { type: "Polygon", coordinates: [pts.concat([pts[0]])] }, properties: {} });
+          if (pts.length >= 2) f.push({ type: "Feature", geometry: { type: "LineString", coordinates: closed ? pts.concat([pts[0]]) : pts }, properties: {} });
+          pts.forEach(function (p) { f.push({ type: "Feature", geometry: { type: "Point", coordinates: p }, properties: {} }); });
+          return { type: "FeatureCollection", features: f };
+        }
+        function ensureMeasureLayers() {
+          if (!map || !map.getStyle()) return;
+          if (!map.getSource("rd-measure")) {
+            map.addSource("rd-measure", { type: "geojson", data: measureData() });
+            map.addLayer({ id: "rd-measure-fill", type: "fill", source: "rd-measure", filter: ["==", ["geometry-type"], "Polygon"], paint: { "fill-color": "#2563eb", "fill-opacity": 0.12 } });
+            map.addLayer({ id: "rd-measure-line", type: "line", source: "rd-measure", filter: ["==", ["geometry-type"], "LineString"], paint: { "line-color": "#2563eb", "line-width": 2.5, "line-dasharray": [2, 1.5] } });
+            map.addLayer({ id: "rd-measure-pts", type: "circle", source: "rd-measure", filter: ["==", ["geometry-type"], "Point"], paint: { "circle-radius": 4.5, "circle-color": "#ffffff", "circle-stroke-color": "#2563eb", "circle-stroke-width": 2 } });
+          } else {
+            ["rd-measure-fill", "rd-measure-line", "rd-measure-pts"].forEach(function (id) { if (map.getLayer(id)) map.moveLayer(id); });
+          }
+        }
+        function updateMeasure() {
+          var len = 0;
+          for (var i = 1; i < pts.length; i++) len += haversine(pts[i - 1], pts[i]);
+          var out = pts.length < 2 ? "Clicca sulla mappa per aggiungere punti, doppio clic per chiudere l'area." : "Distanza: " + fmtLen(len);
+          if (finished && pts.length >= 3) out += " · Perimetro: " + fmtLen(len + haversine(pts[pts.length - 1], pts[0])) + " · Area: " + fmtArea(ringArea(pts));
+          $("measure-out").textContent = out;
+          var src = map && map.getSource("rd-measure");
+          if (src) src.setData(measureData());
+        }
+        function setMeasure(on) {
+          measuring = on;
+          if (on) stopPick();
+          $("measure-box").hidden = !on;
+          $("map").classList.toggle("measuring", on);
+          if (measureBtn) measureBtn.classList.toggle("ctrl-active", on);
+          if (map) { if (on) map.doubleClickZoom.disable(); else map.doubleClickZoom.enable(); }
+          if (!on) { pts = []; finished = false; }
+          updateMeasure();
+        }
+        function stopMeasure() { if (measuring) setMeasure(false); }
+        $("measure-undo").addEventListener("click", function () { pts.pop(); finished = false; updateMeasure(); });
+        $("measure-clear").addEventListener("click", function () { pts = []; finished = false; updateMeasure(); });
+        $("measure-close").addEventListener("click", stopMeasure);
 
-        // ---------------------------------------------------------------- go to coordinates
+        // ------------------------------------------------------------------ export image
+        function exportPng() {
+          if (!map) return;
+          map.once("render", function () {
+            map.getCanvas().toBlob(function (blob) {
+              if (!blob) return showNotice("Esportazione non riuscita.");
+              var a = el("a", { href: URL.createObjectURL(blob), download: "redeep-mappa-" + new Date().toISOString().slice(0, 10) + ".png" });
+              document.body.appendChild(a);
+              a.click();
+              setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+            }, "image/png");
+          });
+          map.triggerRepaint();
+        }
+
+        // ------------------------------------------------------------------ search: layers or coordinates
         $("goto").addEventListener("submit", function (e) {
           e.preventDefault();
           var msg = $("goto-msg");
-          var m = /^\s*(-?\d+(?:[.,]\d+)?)\s*[,;\s]\s*(-?\d+(?:[.,]\d+)?)\s*$/.exec($("goto-input").value);
-          if (!m) { msg.textContent = "Scrivi latitudine e longitudine, es. 45.07, 7.68"; return; }
-          var lat = parseFloat(m[1].replace(",", "."));
-          var lon = parseFloat(m[2].replace(",", "."));
-          if (Math.abs(lat) > 90 || Math.abs(lon) > 180) { msg.textContent = "Coordinate fuori scala."; return; }
-          msg.textContent = "";
-          if (map) map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 13) });
+          var v = $("goto-input").value.trim();
+          var m = /^\s*(-?\d+(?:[.,]\d+)?)\s*[,;\s]\s*(-?\d+(?:[.,]\d+)?)\s*$/.exec(v);
+          if (m) {
+            var lat = parseFloat(m[1].replace(",", ".")), lon = parseFloat(m[2].replace(",", "."));
+            if (Math.abs(lat) > 90 || Math.abs(lon) > 180) { msg.textContent = "Coordinate fuori scala."; return; }
+            msg.textContent = "";
+            if (map) map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 13) });
+            return;
+          }
+          var q = v.toLowerCase();
+          var s = STYLES.filter(function (x) { return q && x.label.toLowerCase().indexOf(q) >= 0; })[0];
+          var g = GROUPS.filter(function (x) { return q && (x.label.toLowerCase().indexOf(q) >= 0 || x.note.toLowerCase().indexOf(q) >= 0); })[0];
+          if (s) { selectStyle(s.id); msg.textContent = "Sfondo: " + s.label; return; }
+          if (g && layersOf(g.id).length) { addComp(g.id); msg.textContent = "«" + g.label + "» nei layer."; return; }
+          msg.textContent = "Scrivi il nome di un layer (es. edifici) o latitudine e longitudine (es. 45.07, 7.68).";
         });
 
-        // ---------------------------------------------------------------- status bar
-        var stCoords = $("st-coords"), stZoom = $("st-zoom"), stBearing = $("st-bearing"), stPitch = $("st-pitch"), stBbox = $("st-bbox");
+        // ------------------------------------------------------------------ status bar
         function updateView() {
           var b = map.getBounds();
-          stZoom.textContent = map.getZoom().toFixed(2);
-          stBearing.textContent = map.getBearing().toFixed(1) + "°";
-          stPitch.textContent = map.getPitch().toFixed(1) + "°";
-          stBbox.textContent = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()].map(function (n) { return n.toFixed(4); }).join(", ");
+          $("st-zoom").textContent = map.getZoom().toFixed(2);
+          $("st-bearing").textContent = map.getBearing().toFixed(1) + "°";
+          $("st-pitch").textContent = map.getPitch().toFixed(1) + "°";
+          $("st-bbox").textContent = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()].map(function (n) { return n.toFixed(4); }).join(", ");
         }
 
-        // ---------------------------------------------------------------- map
-        loadStyle(current)
+        // ------------------------------------------------------------------ map
+        loadStyle(styleId)
           .then(function (style) {
+            styleJson = JSON.parse(JSON.stringify(style));
+            renderLayers();
+            renderTree();
             map = new maplibregl.Map({
               container: "map",
               style: withProjection(style),
@@ -597,26 +970,44 @@
             });
             map.addControl(new maplibregl.FullscreenControl(), "top-right");
             map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
-            map.addControl(new GlobeControl(), "top-right");
-            map.addControl(new BasemapControl(), "top-right");
+            map.addControl(buttonControl("globe", "Vista globo / piana", function () { setGlobe(!globe); renderLayers(); }, function (b) { globeBtn = b; setGlobe(globe, false); }), "top-right");
+            map.addControl(buttonControl("layers", "Cambia sfondo", openBasemaps), "top-right");
+            map.addControl(buttonControl("pick", "Informazioni: clicca un oggetto", function () { setPick(!picking); }, function (b) { pickBtn = b; }), "top-right");
+            map.addControl(buttonControl("ruler", "Misura distanze e aree", function () { setMeasure(!measuring); }, function (b) { measureBtn = b; }), "top-right");
+            map.addControl(buttonControl("camera", "Esporta immagine (PNG)", exportPng), "top-right");
             map.addControl(new maplibregl.GeolocateControl({ positionOptions: { enableHighAccuracy: false } }), "top-right");
             map.addControl(new maplibregl.ScaleControl(), "bottom-left");
-            map.on("load", function () { setOpacity(opacity.value); updateView(); });
-            map.on("styledata", function () { setOpacity(opacity.value); });
+            map.on("style.load", applyState);
+            map.on("load", updateView);
             map.on("moveend", updateView);
-            map.on("mousemove", function (e) { stCoords.textContent = e.lngLat.lat.toFixed(5) + ", " + e.lngLat.lng.toFixed(5); });
-            map.on("mouseout", function () { stCoords.textContent = "—"; });
+            map.on("mousemove", function (e) { $("st-coords").textContent = e.lngLat.lat.toFixed(5) + ", " + e.lngLat.lng.toFixed(5); });
+            map.on("mouseout", function () { $("st-coords").textContent = "—"; });
+            map.on("click", function (e) {
+              if (measuring) {
+                if (finished) { pts = []; finished = false; }
+                pts.push([e.lngLat.lng, e.lngLat.lat]);
+                updateMeasure();
+              } else if (picking) identify(e);
+            });
+            map.on("dblclick", function (e) {
+              if (!measuring) return;
+              e.preventDefault();
+              // A double click also fires two clicks: drop the duplicate point.
+              if (pts.length >= 2 && haversine(pts[pts.length - 1], pts[pts.length - 2]) < 1) pts.pop();
+              finished = true;
+              updateMeasure();
+            });
             map.on("error", function (event) {
               if (failed) return;
               var message = (event && event.error && event.error.message) || "";
               if (/pmtiles|planet|Failed to fetch|NetworkError|40[34]/i.test(message)) {
                 failed = true;
-                showNotice("Tile della mappa non raggiungibili al momento.");
+                showNotice("Tile della mappa non raggiungibili al momento.", true);
               }
             });
           })
           .catch(function (error) {
-            showNotice(error.message || "Impossibile avviare la mappa.");
+            showNotice(error.message || "Impossibile avviare la mappa.", true);
           });
       })();
     </script>
