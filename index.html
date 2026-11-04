@@ -266,7 +266,6 @@
           <button type="button" class="icon-btn" data-close-panel title="Chiudi pannello" aria-label="Chiudi pannello"><svg width="17" height="17"><use href="#i-collapse"/></svg></button>
         </div>
         <div class="panel-body">
-          <p class="hint">Lo «Sfondo» è la mappa di base Redeep. Dal Browser puoi aggiungerne le componenti (edifici, strade, acque…) come layer separati, per nasconderle o cambiarne colore, opacità e ordine.</p>
           <div class="cards" id="cards"></div>
         </div>
         <div class="panel-foot">
@@ -316,6 +315,9 @@
         "use strict";
         // Basemap assets on DigitalOcean Spaces (CDN): planet.pmtiles, fonts/, sprites/, natural_earth/
         var TILES_BASE = "https://redeep-tiles.ams3.cdn.digitaloceanspaces.com";
+        // planet.pmtiles is read straight from the bucket: on a cache miss the CDN answers a range request with
+        // the whole 78 GB file (200 instead of 206) and the map stays empty. Small files stay on the CDN.
+        var PMTILES_URL = "https://redeep-tiles.ams3.digitaloceanspaces.com/planet.pmtiles";
         var ATTRIBUTION =
           '<a href="https://openmaptiles.org/" target="_blank" rel="noopener">&copy; OpenMapTiles</a> ' +
           '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">&copy; OpenStreetMap contributors</a>';
@@ -432,7 +434,7 @@
                 .then(function (r) { if (!r.ok) throw new Error("Stile non trovato: " + id); return r.json(); })
                 .then(function (style) {
                   // OpenFreeMap styles ship with __TILEJSON_DOMAIN__ placeholders: point them at our bucket.
-                  style.sources.openmaptiles = { type: "vector", url: "pmtiles://" + TILES_BASE + "/planet.pmtiles", attribution: ATTRIBUTION };
+                  style.sources.openmaptiles = { type: "vector", url: "pmtiles://" + PMTILES_URL, attribution: ATTRIBUTION };
                   if (style.sources.ne2_shaded) style.sources.ne2_shaded.tiles = [TILES_BASE + "/natural_earth/ne2sr/{z}/{x}/{y}.png"];
                   style.sprite = TILES_BASE + "/sprites/ofm_f384/ofm";
                   style.glyphs = TILES_BASE + "/fonts/{fontstack}/{range}.pbf";
